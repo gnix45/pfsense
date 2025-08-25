@@ -1,8 +1,6 @@
 // File: api/gemini.js
 // This code will run on Vercel's server, allowing it to securely use the API key.
 
-import fetch from 'node-fetch';
-
 // This function handles the API request from the client.
 export default async (req, res) => {
     // Set CORS headers to allow requests from any origin.
