@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pfSense on VMware Guide</title>
+    <!-- Use a modern, beautiful font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f14;
+            color: #d1d5db;
+        }
+
+        /* Animated gradient background for a dynamic look */
+        .animated-gradient-bg {
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #15202b, #0c1524);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Custom scrollbar styling for a clean look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+        
+        /* CSS for the blinking effect */
+        .blinking-text {
+            animation: blink 1.5s linear infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="animated-gradient-bg min-h-screen">
+    <header class="py-6 px-4 md:px-8 border-b border-gray-700 backdrop-blur-sm sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-white">pfSense on VMware by Mr PK</h1>
+            <nav>
+                <a href="#overview" class="text-sm md:text-base text-gray-400 hover:text-white transition-colors duration-300 mx-2 md:mx-4">Overview</a>
+                <a href="#setup" class="text-sm md:text-base text-gray-400 hover:text-white transition-colors duration-300 mx-2 md:mx-4">Setup</a>
+                <a href="#gui" class="text-sm md:text-base text-gray-400 hover:text-white transition-colors duration-300 mx-2 md:mx-4">GUI & Rules</a>
+                <a href="#assistant" class="text-sm md:text-base text-gray-400 hover:text-white transition-colors duration-300 mx-2 md:mx-4">Assistant</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <!-- Hero Section -->
+        <section class="py-16 text-center">
+            <h2 class="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-4">Master Your Network Security</h2>
+            <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                A step-by-step guide to setting up pfSense as a virtual firewall on VMware with a dedicated WAN and LAN interface.
+            </p>
+            <a href="#setup" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 hover:scale-105">
+                Start the Guide
+            </a>
+        </section>
+
+        <!-- Overview Section -->
+        <section id="overview" class="py-12 bg-gray-800 bg-opacity-50 rounded-2xl shadow-xl backdrop-blur-sm mb-12">
+            <div class="px-6 md:px-12">
+                <h3 class="text-3xl font-bold text-white mb-6 text-center">What We'll Cover</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-gray-700 bg-opacity-30 p-6 rounded-xl text-center border border-gray-600">
+                        <div class="text-3xl mb-4 text-blue-400">VM Creation</div>
+                        <p class="text-gray-300">Setting up the virtual machine with the correct specifications.</p>
+                    </div>
+                    <div class="bg-gray-700 bg-opacity-30 p-6 rounded-xl text-center border border-gray-600">
+                        <div class="text-3xl mb-4 text-blue-400">Dual NIC Setup</div>
+                        <p class="text-gray-300">Configuring separate virtual NICs for WAN and LAN.</p>
+                    </div>
+                    <div class="bg-gray-700 bg-opacity-30 p-6 rounded-xl text-center border border-gray-600">
+                        <div class="text-3xl mb-4 text-blue-400">Console Install</div>
+                        <p class="text-gray-300">Navigating the initial text-based installation process.</p>
+                    </div>
+                    <div class="bg-gray-700 bg-opacity-30 p-6 rounded-xl text-center border border-gray-600">
+                        <div class="text-3xl mb-4 text-blue-400">First Rule</div>
+                        <p class="text-gray-300">Accessing the GUI and creating your first firewall rule.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step-by-Step Guide Section -->
+        <section id="setup" class="py-12">
+            <h3 class="text-3xl font-bold text-white mb-8 text-center">Step-by-Step Guide</h3>
+            
+            <!-- Step 1 -->
+            <div class="bg-gray-800 bg-opacity-50 rounded-2xl shadow-xl backdrop-blur-sm p-8 mb-8 border border-gray-700">
+                <h4 class="text-2xl font-bold text-blue-400 mb-4">Step 1: Virtual Machine Creation</h4>
+                <p class="text-gray-300 mb-4">
+                    First, you need to create a new virtual machine in VMware. This guide assumes you have VMware Workstation or ESXi.
+                </p>
+                <ol class="list-decimal list-inside space-y-4 text-gray-400 ml-4">
+                    <li>Open VMware and click to create a **New Virtual Machine**.</li>
+                    <li>Select **Typical** configuration and click next.</li>
+                    <li>On the installer screen, choose to install the OS later by selecting **I will install the operating system later**.</li>
+                    <li>For the guest OS, select **Other** and then **FreeBSD 64-bit**. pfSense is based on FreeBSD.</li>
+                    <li>Give the VM a descriptive name, like "pfSense-Firewall".</li>
+                    <li>Set the disk size to at least 16GB. You can choose to store it as a single file.</li>
+                    <li>Click **Customize Hardware**. Set the memory to at least **1024MB** (1GB) and assign **1 CPU** with at least **1 Core**.</li>
+                </ol>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="bg-gray-800 bg-opacity-50 rounded-2xl shadow-xl backdrop-blur-sm p-8 mb-8 border border-gray-700">
+                <h4 class="text-2xl font-bold text-blue-400 mb-4">Step 2: Configuring Dual NICs (WAN and LAN)</h4>
+                <p class="text-gray-300 mb-4">
+                    This is the most critical part for a proper firewall setup. You need to assign two separate virtual network adapters.
+                </p>
+                <ol class="list-decimal list-inside space-y-4 text-gray-400 ml-4">
+                    <li>In the **Customize Hardware** window from the previous step, select **Network Adapter**.</li>
+                    <li>For the first adapter (WAN), set it to **NAT**. This will give pfSense internet access from your host machine's network.</li>
+                    <li>Click the **Add...** button and select **Network Adapter** to add a second NIC.</li>
+                    <li>For the second adapter (LAN), set it to **Host-only**. This creates an isolated, internal network for your lab.</li>
+                    <li>Finally, click on **CD/DVD Drive**, select **Use ISO image file**, and browse to your downloaded pfSense ISO file.</li>
+                    <li>Click **Finish** to create the VM.</li>
+                </ol>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="bg-gray-800 bg-opacity-50 rounded-2xl shadow-xl backdrop-blur-sm p-8 mb-8 border border-gray-700">
+                <h4 class="text-2xl font-bold text-blue-400 mb-4">Step 3: Installation via Console</h4>
+                <p class="text-gray-300 mb-4">
+                    Power on your new pfSense VM and follow the on-screen instructions in the console window.
+                </p>
+                <ul class="list-disc list-inside space-y-4 text-gray-400 ml-4">
+                    <li>Once the installer boots, accept the terms and select **Install**.</li>
+                    <li>Choose **Auto (UFS/ZFS)** guided installation. For most use cases, ZFS is a good choice.</li>
+                    <li>Press enter to accept the default partitioning and begin the installation.</li>
+                    <li>After the installation is complete, reboot the machine and remove the ISO from the virtual CD drive.</li>
+                    <li>When the system boots up again, it will ask to assign interfaces. This is where you map the physical network cards to the logical WAN and LAN interfaces.</li>
+                    <li>Enter `n` for no VLANs.</li>
+                    <li>Enter the name of your WAN adapter (e.g., `em0`, `vmx0`).</li>
+                    <li>Enter the name of your LAN adapter (e.g., `em1`, `vmx1`).</li>
+                    <li>Confirm the assignments. The console will now show you the IP addresses assigned to each interface. The LAN IP will likely be **192.168.1.1**.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- GUI & Rules Section -->
+        <section id="gui" class="py-12">
+            <h3 class="text-3xl font-bold text-white mb-8 text-center">Accessing the GUI & Setting the First Rule</h3>
+            
+            <!-- Step 4 -->
+            <div class="bg-gray-800 bg-opacity-50 rounded-2xl shadow-xl backdrop-blur-sm p-8 mb-8 border border-gray-700">
+                <h4 class="text-2xl font-bold text-blue-400 mb-4">Step 4: Accessing the Web GUI</h4>
+                <p class="text-gray-300 mb-4">
+                    Now that your VM has a LAN IP, you can access the web-based GUI from another machine on your Host-only network.
+                </p>
+                <ol class="list-decimal list-inside space-y-4 text-gray-400 ml-4">
+                    <li>Open a web browser on your host machine or another VM connected to the Host-only network.</li>
+                    <li>Navigate to `https://192.168.1.1`. You will see a security warning due to the self-signed certificate. Proceed past it.</li>
+                    <li>Log in with the default credentials: **Username:** `admin`, **Password:** `pfsense`.</li>
+                    <li>The **Setup Wizard** will begin. Follow the prompts to set your hostname, domain, time zone, and change the default `admin` password. This is a crucial security step!</li>
+                </ol>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="bg-gray-800 bg-opacity-50 rounded-2xl shadow-xl backdrop-blur-sm p-8 mb-8 border border-gray-700">
+                <h4 class="text-2xl font-bold text-blue-400 mb-4">Step 5: Creating the First Rule</h4>
+                <p class="text-gray-300 mb-4">
+                    By default, pfSense has a rule on the LAN interface to allow all traffic. Let's create a simple **block** rule to demonstrate how the firewall works.
+                </p>
+                <ol class="list-decimal list-inside space-y-4 text-gray-400 ml-4">
+                    <li>From the dashboard, navigate to **Firewall > Rules**.</li>
+                    <li>Select the **LAN** tab.</li>
+                    <li>Click the **Add** button at the top of the list to add a new rule.</li>
+                    <li>Configure the rule as follows:
+                        <ul class="list-disc list-inside ml-8 text-gray-400">
+                            <li>**Action:** `Block`</li>
+                            <li>**Interface:** `LAN`</li>
+                            <li>**Address Family:** `IPv4`</li>
+                            <li>**Protocol:** `TCP`</li>
+                            <li>**Source:** `LAN net`</li>
+                            <li>**Destination:** `Any`</li>
+                            <li>**Destination Port Range:** `HTTP` (or type `80`)</li>
+                            <li>**Description:** `Block HTTP Traffic`</li>
+                        </ul>
+                    </li>
+                    <li>Click **Save** and then **Apply Changes** to activate the new rule.</li>
+                    <li>Test this rule by trying to access a non-HTTPS website from a client machine on the LAN. It should now be blocked!</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- AI Assistant Section -->
+        <section id="assistant" class="py-12 bg-gray-800 bg-opacity-50 rounded-2xl shadow-xl backdrop-blur-sm p-8 border border-gray-700">
+            <h3 class="text-3xl font-bold text-white mb-6 text-center">✨ AI-Powered pfSense Assistant ✨</h3>
+            <p class="text-gray-300 text-center mb-6">
+                Need help with a rule or a security concept? Ask our AI assistant! Describe what you're trying to achieve, and it will provide helpful guidance.
+            </p>
+            <div class="flex flex-col items-center">
+                <textarea id="assistant-input" class="w-full md:w-3/4 p-4 rounded-xl bg-gray-700 text-gray-200 placeholder-gray-500 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" rows="4" placeholder="e.g., 'How do I create a rule to block social media sites?' or 'What are some basic security practices for a home network?'"></textarea>
+                <button id="ask-button" class="bg-gradient-to-r from-teal-500 to-green-600 hover:from-teal-600 hover:to-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 hover:scale-105">
+                    Ask Assistant
+                </button>
+                <div id="assistant-output" class="mt-8 w-full md:w-3/4 p-6 rounded-xl bg-gray-700 bg-opacity-30 border border-gray-600" style="display: none;">
+                    <p class="text-gray-300"></p>
+                </div>
+                <div id="loading-spinner" class="mt-8 hidden">
+                    <div class="w-12 h-12 rounded-full border-4 border-solid border-blue-500 border-t-transparent animate-spin"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-6 text-center text-gray-500 text-sm border-t border-gray-700 mt-12">
+        <p>&copy; 2025 pfSense Guide. All rights reserved. <span class="blinking-text">Contact <a href="https://t.me/tectrib" class="text-blue-400 hover:underline">PK on Telegram</a>.</span></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const askButton = document.getElementById('ask-button');
+            const assistantInput = document.getElementById('assistant-input');
+            const assistantOutput = document.getElementById('assistant-output');
+            const loadingSpinner = document.getElementById('loading-spinner');
+
+            askButton.addEventListener('click', async () => {
+                const userPrompt = assistantInput.value.trim();
+                if (!userPrompt) {
+                    // Replaced alert with a custom message in the output area
+                    assistantOutput.querySelector('p').textContent = 'Please enter a question or a topic.';
+                    assistantOutput.style.display = 'block';
+                    return;
+                }
+
+                assistantOutput.style.display = 'none';
+                loadingSpinner.style.display = 'block';
+
+                try {
+                    const chatHistory = [];
+                    const prompt = `You are a helpful pfSense network security assistant. A user wants to know about a firewall rule or security best practice. They describe their request as: '${userPrompt}'. Provide a clear, concise, and helpful explanation or suggestion for their pfSense setup. Use a friendly and encouraging tone. Do not provide code, only descriptive text.`;
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+                    const payload = {
+                        contents: chatHistory
+                    };
+
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API error: ${response.status} ${response.statusText}`);
+                    }
+
+                    const result = await response.json();
+                    
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        assistantOutput.querySelector('p').textContent = text;
+                        assistantOutput.style.display = 'block';
+                    } else {
+                        throw new Error('Invalid API response structure.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    assistantOutput.querySelector('p').textContent = `Sorry, there was an error. Please try again. (${error.message})`;
+                    assistantOutput.style.display = 'block';
+                } finally {
+                    loadingSpinner.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
