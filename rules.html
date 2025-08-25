@@ -1,0 +1,132 @@
+<!-- File: rules.html (The new page for detailed firewall rules) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pfSense Firewall Rules</title>
+    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap)" rel="stylesheet">
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f14;
+            color: #d1d5db;
+        }
+
+        .animated-gradient-bg {
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #15202b, #0c1524);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+    </style>
+</head>
+<body class="animated-gradient-bg min-h-screen">
+    <header class="py-6 px-4 md:px-8 border-b border-gray-700 backdrop-blur-sm sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-white">Rules on pfsense by Mr PK</h1>
+            <nav>
+                <a href="index.html#overview" class="text-sm md:text-base text-gray-400 hover:text-white transition-colors duration-300 mx-2 md:mx-4">Overview</a>
+                <a href="index.html#setup" class="text-sm md:text-base text-gray-400 hover:text-white transition-colors duration-300 mx-2 md:mx-4">Setup</a>
+                <a href="index.html#assistant" class="text-sm md:text-base text-gray-400 hover:text-white transition-colors duration-300 mx-2 md:mx-4">Assistant</a>
+                <a href="rules.html" class="text-sm md:text-base text-white transition-colors duration-300 mx-2 md:mx-4 font-bold">Firewall Rules</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <section id="rules-guide" class="py-12">
+            <h2 class="text-4xl font-extrabold text-white leading-tight mb-8 text-center">Detailed Guide: Creating a Firewall Rule</h2>
+
+            <div class="bg-gray-800 bg-opacity-50 rounded-2xl shadow-xl backdrop-blur-sm p-8 mb-8 border border-gray-700">
+                <h3 class="text-2xl font-bold text-blue-400 mb-4">Step 1: Access the Rules Page</h3>
+                <p class="text-gray-300 mb-4">
+                    From your pfSense dashboard, navigate to **Firewall** and then select **Rules**. This is where you'll see a list of all your existing rules, organized by interface (WAN, LAN, etc.).
+                </p>
+                <div class="text-gray-400 italic mt-2">
+                    
+                </div>
+            </div>
+
+            <div class="bg-gray-800 bg-opacity-50 rounded-2xl shadow-xl backdrop-blur-sm p-8 mb-8 border border-gray-700">
+                <h3 class="text-2xl font-bold text-blue-400 mb-4">Step 2: Add a New Rule</h3>
+                <p class="text-gray-300 mb-4">
+                    Select the tab for the interface you want the rule to apply to (e.g., LAN). Click the **"Add"** button at the top of the rule list.
+                </p>
+                <div class="text-gray-400 italic mt-2">
+                    
+                </div>
+            </div>
+
+            <div class="bg-gray-800 bg-opacity-50 rounded-2xl shadow-xl backdrop-blur-sm p-8 mb-8 border border-gray-700">
+                <h3 class="text-2xl font-bold text-blue-400 mb-4">Step 3: Configure the Rule's Action</h3>
+                <p class="text-gray-300 mb-4">
+                    The most important setting is the **Action**.
+                </p>
+                <ul class="list-disc list-inside space-y-2 text-gray-400 ml-4">
+                    <li>**Pass:** Allows the traffic to pass.</li>
+                    <li>**Block:** Silently drops the traffic. The sender receives no notification.</li>
+                    <li>**Reject:** Drops the traffic and sends a "port unreachable" message back to the sender.</li>
+                </ul>
+                <div class="text-gray-400 italic mt-2">
+                    
+                </div>
+            </div>
+
+            <div class="bg-gray-800 bg-opacity-50 rounded-2xl shadow-xl backdrop-blur-sm p-8 mb-8 border border-gray-700">
+                <h3 class="text-2xl font-bold text-blue-400 mb-4">Step 4: Define Source and Destination</h3>
+                <p class="text-gray-300 mb-4">
+                    This is where you specify **what** and **where** the rule applies.
+                </p>
+                <ul class="list-disc list-inside space-y-2 text-gray-400 ml-4">
+                    <li>**Interface:** Set to `LAN` or `WAN`.</li>
+                    <li>**Address Family:** `IPv4` or `IPv6`.</li>
+                    <li>**Protocol:** `TCP`, `UDP`, or `any`.</li>
+                    <li>**Source:** You can select a single host, a network (`LAN net`), or an alias.</li>
+                    <li>**Destination:** Similar to the source, this can be a single IP, a network, or a port.</li>
+                </ul>
+                <div class="text-gray-400 italic mt-2">
+                    
+                </div>
+            </div>
+
+            <div class="bg-gray-800 bg-opacity-50 rounded-2xl shadow-xl backdrop-blur-sm p-8 mb-8 border border-gray-700">
+                <h3 class="text-2xl font-bold text-blue-400 mb-4">Step 5: Save and Apply</h3>
+                <p class="text-gray-300 mb-4">
+                    Once you've configured your rule, click **Save**. You must then click the **Apply Changes** button at the top of the rules page for the new rule to become active.
+                </p>
+                <div class="text-gray-400 italic mt-2">
+                    
+                </div>
+            </div>
+
+        </section>
+    </main>
+    <footer class="py-6 text-center text-gray-500 text-sm border-t border-gray-700 mt-12">
+        <p>&copy; 2025 pfSense Guide. All rights reserved. <span class="blinking-text">Contact <a href="[https://t.me/PK](https://t.me/PK)" class="text-blue-400 hover:underline">PK on Telegram</a>.</span></p>
+    </footer>
+</body>
+</html>
