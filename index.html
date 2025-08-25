@@ -232,7 +232,7 @@
     </main>
 
     <footer class="py-6 text-center text-gray-500 text-sm border-t border-gray-700 mt-12">
-        <p>&copy; 2025 pfSense Guide. All rights reserved. <span class="blinking-text">Contact <a href="https://t.me/tectrib" class="text-blue-400 hover:underline">PK on Telegram</a>.</span></p>
+        <p>&copy; 2025 pfSense Guide. All rights reserved. <span class="blinking-text">Contact <a href="https://t.me/PK" class="text-blue-400 hover:underline">PK on Telegram</a>.</span></p>
     </footer>
 
     <script>
@@ -245,7 +245,6 @@
             askButton.addEventListener('click', async () => {
                 const userPrompt = assistantInput.value.trim();
                 if (!userPrompt) {
-                    // Replaced alert with a custom message in the output area
                     assistantOutput.querySelector('p').textContent = 'Please enter a question or a topic.';
                     assistantOutput.style.display = 'block';
                     return;
@@ -255,37 +254,24 @@
                 loadingSpinner.style.display = 'block';
 
                 try {
-                    const chatHistory = [];
-                    const prompt = `You are a helpful pfSense network security assistant. A user wants to know about a firewall rule or security best practice. They describe their request as: '${userPrompt}'. Provide a clear, concise, and helpful explanation or suggestion for their pfSense setup. Use a friendly and encouraging tone. Do not provide code, only descriptive text.`;
-                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-
-                    const payload = {
-                        contents: chatHistory
-                    };
-
-                    const apiKey = "";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-                    const response = await fetch(apiUrl, {
+                    // Call the Vercel Serverless Function instead of the Gemini API directly.
+                    const response = await fetch('/api/gemini', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
+                        body: JSON.stringify({ userPrompt: userPrompt })
                     });
 
-                    if (!response.ok) {
-                        throw new Error(`API error: ${response.status} ${response.statusText}`);
-                    }
-
                     const result = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(result.error || 'Unknown API Error');
+                    }
                     
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        const text = result.candidates[0].content.parts[0].text;
-                        assistantOutput.querySelector('p').textContent = text;
+                    if (result.text) {
+                        assistantOutput.querySelector('p').textContent = result.text;
                         assistantOutput.style.display = 'block';
                     } else {
-                        throw new Error('Invalid API response structure.');
+                        throw new Error('Invalid response structure from server.');
                     }
                 } catch (error) {
                     console.error('Error:', error);
